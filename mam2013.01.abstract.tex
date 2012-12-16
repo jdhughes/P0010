@@ -1,0 +1,30 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+% This is a simple template for a LaTeX document using the "article" class.
+% See "book", "report", "letter" for other types of document.
+
+\documentclass[12pt]{article} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+\usepackage{geometry} % to change the page dimensions
+\geometry{letterpaper} % or letterpaper (US) or a5paper or....
+\geometry{margin=1in} % for example, change the margins to 2 inches all round
+
+\title{Evaluation of parallel explicit and \\implicit solvers for MODFLOW}
+\author{Hughes, J.D. \and Langevin, C.D. \and Harbaugh, A.W. \and White, J.T.}
+%\date{} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+
+We have developed a solver package (PSOL) capable of parallel solution of the groundwater flow equation solved by MODFLOW. The PSOL package includes explicit and implict methods for solving the groundwater equation. The explicit solver includes a method for subdividing MODFLOW timesteps to satisfy stability constraints and a pseudo-transient continuation approach for simulating steady-state conditions. The implicit solver implements the preconditioned conjugate gradient method and includes Jacobi, zero-order incomplete factorization, and least-squares polynomial preconditioners. Parallel solution of the groundwater flow equation is possible using OpenMP on multi-core central processing units or on general purpose graphical processing units capable of double-precision floating-point operations.
+
+The parallel performance of the explicit and implicit solvers was evaluated using transient synthetic test problems representing confined and unconfined aquifers. Because of the highly-parallelizable nature of the least-squares polynomial preconditioner, implicit solutions used this preconditioner. The synthetic test problems included groundwater recharge and withdrawals applied to aquifer systems having ambient groundwater flow. The synthetic confined and unconfined aquifers were simulated using several levels of horizontal and vertical discretization to evaluate the scalability of parallel speed-up possible with the PSOL solver. Explicit solver solution errors are compared to implicit solver errors to quantify the relative increase in mass balance error that results from an explicit formulation of the groundwater flow equation when stability constraints are satisfied.
+
+\end{abstract}
+
+\end{document}
