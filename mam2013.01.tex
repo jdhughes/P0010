@@ -24,6 +24,7 @@
 % \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
 
 %%% PACKAGES
+\usepackage{amsmath}
 \usepackage{booktabs} % for much better looking tables
 \usepackage{array} % for better arrays (eg matrices) in maths
 \usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
@@ -63,35 +64,42 @@
 
 \section{First section}
 
-In one-dimension:
+For a one-dimension model where NROW = NLAY = 1:
 
-\begin{equation} \label{eq1d1}
-C_{i-\frac{1}{2}} \left( h^t_{i-1} + h^t_i \right) + C_{i+\frac{1}{2}} \left( h^t_{i+1} + h^t_i \right) + H_{i}\left( h^{t}_{b} - h^{t}_{i} \right) + \frac{S_{ijk} \Delta x \Delta y \Delta z}{\Delta t} \left( h^{t+1}_{i} - h^t_i \right) + w = 0
-\end{equation}
+\begin{align}  
+C_{i-\frac{1}{2},j,k} \left( h^t_{i-1,j,k} - h^t_{i,j,k} \right) &+ C_{i+\frac{1}{2}} \left( h^t_{i+1,j,k} - h^t_{i,j,k} \right) + H_{i}\left( h^{t}_{b} - h^{t}_{i,j,k} \right) \nonumber \label{eq1d1}\\ &+ \frac{S^{t}_{i,j,k} \Delta x_{i,j,k} \Delta y_{i,j,k} \Delta z_{i,j,k}}{\Delta t} \left( h^{t+1}_{i,j,k} - h^t_{i,j,k} \right) + w = 0
+\end{align}
 
 \noindent simplify equation \ref{eq1d1} to:
 
-\begin{equation} \label{eq1d2}
-h^t_{i} - h^{t+1}_i = \frac{\Delta t}{S_{ijk} \Delta x \Delta y \Delta z} \left[ C_{i-\frac{1}{2}} \left( h^t_{i-1} + h^t_i \right) + C_{i+\frac{1}{2}} \left( h^t_{i+1} + h^t_i \right) + H_{i}\left( h^{t}_{b} - h^{t}_{i} \right) + w \right]
+\begin{align}
+h^t_{i,j,k} - h^{t+1}_{i,j,k} = \frac{\Delta t}{S^{t}_{i,j,k} \Delta x_{i,j,k} \Delta y_{i,j,k} \Delta z_{i,j,k}} &\left[ C_{i-\frac{1}{2},j,k} \left( h^t_{i-1,j,k} - h^t_i \right) + C_{i+\frac{1}{2},j,k} \left( h^t_{i+1,j,k} - h^t_{i,j,k} \right) \right.\nonumber  \label{eq1d2} \\ &\qquad \left.+ H_{i}\left( h^{t}_{b} - h^{t}_{i,j,k} \right) + w_{i,j,k} \right] 
+\end{align}
+
+\noindent Set:
+
+\begin{equation} \label{eqnTS}
+\hat{s}^{t}_{i,j,k} = \frac{\Delta t}{S_{i,j,k} \Delta x_{i,j,k} \Delta y_{i,j,k} \Delta z_{i,j,k}}
 \end{equation}
+
 
 \noindent rearrange equation \ref{eq1d2} to:
 
-\begin{equation} \label{eq1d3}
-h^{t+1}_i = h^t_{i} - \frac{\Delta t}{S_{ijk} \Delta x \Delta y \Delta z} \left[ C_{i-\frac{1}{2}} \left( h^t_{i-1} + h^t_i \right) + C_{i+\frac{1}{2}} \left( h^t_{i+1} + h^t_i \right) - H_{i} h^{t}_{i} +  H_{i} h^{t}_{b} + w \right] 
-\end{equation}
+\begin{align}
+h^{t+1}_{i,j,k} = h^t_{i,j,k} - \hat{s}^{t}_{i,j,k} &\left[ C_{i-\frac{1}{2},j,k} \left( h^t_{i-1,j,k} - h^t_{i,j,k} \right) \right.\nonumber  \label{eq1d3} \\ &\qquad \left.+ C_{i+\frac{1}{2},j,k} \left( h^t_{i+1,j,k} - h^t_{i,j,k} \right) - H_{i} h^{t}_{i,j,k} +  H_{i,j,k} h^{t}_{b} + w_{i,j,k} \right] 
+\end{align}
 
 Adding known boundary terms:
 
 \begin{equation} \label{eq1d4}
-r^{t}_{i} = H_{i} h^{t}_{b} + w 
+r^{t}_{i} = H_{i,j,k} h^{t}_{b} + w_{i,j,k} 
 \end{equation}
 
 
 Equation \ref{eq1d3} in matrix-vector form:
 
 \begin{equation} \label{eq1dvec}
-\mathbf{h}^{t+1} = \mathbf{h}^t - \frac{\Delta t}{\Delta x \Delta y \Delta z} \mathbf{S_{ijk} } \left[ \left ( \mathbf{C} - \mathbf{H} \right ) \mathbf{h}^{t} + \mathbf{r} \right] 
+\mathbf{h}^{t+1} = \mathbf{h}^t - \hat{\mathbf{s}} \left[ \left ( \mathbf{C} - \mathbf{H} \right ) \mathbf{h}^{t} + \mathbf{r} \right] 
 \end{equation}
 
 \noindent Subject to the stability constraint:
